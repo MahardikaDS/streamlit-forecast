@@ -18,6 +18,8 @@ df = pd.read_excel("CO2 dataset.xlsx")
 df['Year'] = pd.to_datetime(df['Year'], format='%Y')
 df.set_index(['Year'], inplace=True)
 
+df['CO2'] = pd.to_numeric(df['CO2'], errors='coerce')
+
 st.title('Forecasting CO2')
 year = st.slider("Tentukan Tahun",1,30,step = 1)
 
