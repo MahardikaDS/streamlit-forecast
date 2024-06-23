@@ -10,7 +10,7 @@ Original file is located at
 import pickle
 import streamlit as st
 import pandas as pd
-import matlotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 model = pickle.load(open('prediksi_co2.sav', 'rb'))
 
