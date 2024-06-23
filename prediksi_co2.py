@@ -12,27 +12,41 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
+# Load the pre-trained model
 model = pickle.load(open('prediksi_co2.sav', 'rb'))
 
+# Load and prepare the dataset
 df = pd.read_excel("CO2 dataset.xlsx")
 df['Year'] = pd.to_datetime(df['Year'], format='%Y')
 df.set_index(['Year'], inplace=True)
 
+# Ensure CO2 column is numeric
+df['CO2'] = pd.to_numeric(df['CO2'], errors='coerce')
+
 st.title('Forecasting CO2')
-year = st.slider("Tentukan Tahun",1,30,step = 1)
 
+# Select the number of years for prediction
+year = st.slider("Tentukan Tahun", 1, 30, step=1)
+
+# Generate predictions
 pred = model.forecast(year)
-pred = pd.DataFrame(pred, columns=['CO2'])
+pred_index = pd.date_range(start=df.index[-1] + pd.DateOffset(years=1), periods=year, freq='Y')
+pred = pd.DataFrame(pred, index=pred_index, columns=['CO2'])
 
+# Ensure predictions are numeric
 pred['CO2'] = pd.to_numeric(pred['CO2'], errors='coerce')
 
 if st.button("Predict"):
-
-        col1, col2 = st.columns([2,3])
-        with col1:
-             st.dataframe(pred)
-        with col2:
-            fig, ax = plt.subplots()
-            df['CO2'].plot(style='--', color='gray', legend=True, label='known')
-            pred['CO2'].plot(color='b', legend=True, label='prediction')
-            st.pyplot(fig)
+    col1, col2 = st.columns([2, 3])
+    
+    with col1:
+        st.dataframe(pred)
+        
+    with col2:
+        fig, ax = plt.subplots()
+        df['CO2'].plot(style='--', color='gray', legend=True, label='Known', ax=ax)
+        pred['CO2'].plot(color='b', legend=True, label='Prediction', ax=ax)
+        plt.xlabel('Year')
+        plt.ylabel('CO2 Levels')
+        plt.title('CO2 Levels Prediction')
+        st.pyplot(fig)
