@@ -24,6 +24,8 @@ year = st.slider("Tentukan Tahun",1,30,step = 1)
 pred = model.forecast(year)
 pred = pd.DataFrame(pred, columns=['CO2'])
 
+pred['CO2'] = pd.to_numeric(pred['CO2'], errors='coerce')
+
 if st.button("Predict"):
 
         col1, col2 = st.columns([2,3])
