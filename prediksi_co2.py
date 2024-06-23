@@ -8,7 +8,7 @@ Original file is located at
 """
 
 import pickle
-import streamlit as st 
+import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -18,15 +18,11 @@ df = pd.read_excel("CO2 dataset.xlsx")
 df['Year'] = pd.to_datetime(df['Year'], format='%Y')
 df.set_index(['Year'], inplace=True)
 
-df['CO2'] = pd.to_numeric(df['CO2'], errors='coerce')
-
 st.title('Forecasting CO2')
 year = st.slider("Tentukan Tahun",1,30,step = 1)
 
 pred = model.forecast(year)
 pred = pd.DataFrame(pred, columns=['CO2'])
-
-pred['CO2'] = pd.to_numeric(pred['CO2'], errors='coerce')
 
 if st.button("Predict"):
 
