@@ -4,4 +4,5 @@ scikit-learn
 seaborn
 statsmodel
 streamlit==1.35
-matplotlib==3.90
+matplotlib==3.9
+openpyxl
